@@ -12,6 +12,7 @@ PLAYER_NUM_OF_CARD_NUM = [
 
 
 class DeckTest(unittest.TestCase):
+    ""
     def setUp(self) -> None:
         self.deck = Deck()
 
