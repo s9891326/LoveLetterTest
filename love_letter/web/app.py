@@ -92,16 +92,16 @@ async def get_status(game_id: str, player_id: str):
     return build_player_view(game, player_id)
 
 
-@app.post("/games", dependencies=[Depends(JWTBearer())])
-async def lobby_start_game(players: LobbyPlayers):
-    presenter = LobbyStartGamePresenter.presenter()
-    LobbyStartGame().execute(players, presenter)
-    return presenter.as_view_model()
-
-
-@app.get("/heath")
-async def heath():
-    return {"success": True}
+# @app.post("/games", dependencies=[Depends(JWTBearer())])
+# async def lobby_start_game(players: LobbyPlayers):
+#     presenter = LobbyStartGamePresenter.presenter()
+#     LobbyStartGame().execute(players, presenter)
+#     return presenter.as_view_model()
+#
+#
+# @app.get("/heath")
+# async def heath():
+#     return {"success": True}
 
 
 def run():
