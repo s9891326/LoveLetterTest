@@ -42,6 +42,7 @@ jobs:
           path: |
             .
             !venv/
+            !.pytest_cache/
 
   deploy:
     runs-on: ubuntu-latest
@@ -64,3 +65,4 @@ jobs:
           app-name: 'love-letter'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2B1A5D895B6C4B299CB16E49C82CE0F5 }}
+          startup-command: "poetry run uvicorn love_letter.web.app:app"
