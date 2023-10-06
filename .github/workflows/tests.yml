@@ -3,7 +3,7 @@ name: tests
 on:
   push:
     branches:
-      - master
+      - feature/test_deploy_on_azure
   pull_request:
     branches:
       - master
