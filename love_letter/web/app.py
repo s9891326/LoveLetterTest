@@ -42,6 +42,11 @@ app.add_middleware(
 )
 
 
+@app.get("/health")
+async def health():
+    return {"success": True}
+
+
 @app.post("/games/create/by_player/{player_id}")
 async def create_game(player_id: str) -> str:
     presenter = CreateGamePresenter.presenter()
