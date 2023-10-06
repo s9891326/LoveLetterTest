@@ -1,8 +1,11 @@
+import os
 from typing import Union
 
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.routing import APIRouter
+from starlette.staticfiles import StaticFiles
 
 from love_letter.models import GuessCard, ToSomeoneCard
 from love_letter.usecase.create_game import CreateGame
@@ -41,34 +44,41 @@ app.add_middleware(
     ],
 )
 
+api = APIRouter()
+
+if os.environ.get("static_files") is not None:
+    app.mount(
+        "/home", StaticFiles(directory=os.environ.get("static_files")), name="static"
+    )
+
 
 @app.get("/health")
 async def health():
     return {"success": True}
 
 
-@app.post("/games/create/by_player/{player_id}")
+@api.post("/games/create/by_player/{player_id}")
 async def create_game(player_id: str) -> str:
     presenter = CreateGamePresenter.presenter()
     CreateGame().execute(CreateGame.input(player_id), presenter)
     return presenter.as_view_model()
 
 
-@app.post("/games/{game_id}/player/{player_id}/join")
+@api.post("/games/{game_id}/player/{player_id}/join")
 async def join_game(game_id: str, player_id: str) -> bool:
     presenter = JoinGamePresenter.presenter()
     JoinGame().execute(JoinGame.input(game_id, player_id), presenter)
     return presenter.as_view_model()
 
 
-@app.post("/games/{game_id}/start")
+@api.post("/games/{game_id}/start")
 async def start_game(game_id: str):
     presenter = StartGamePresenter.presenter()
     StartGame().execute(StartGame.input(game_id), presenter)
     return presenter.as_view_model()
 
 
-@app.post(
+@api.post(
     "/games/{game_id}/player/{player_id}/card/{card_name}/play",
     response_model=GameStatus,
 )
@@ -86,7 +96,7 @@ async def play_card(
     return build_player_view(game, player_id)
 
 
-@app.get("/games/{game_id}/player/{player_id}/status", response_model=GameStatus)
+@api.get("/games/{game_id}/player/{player_id}/status", response_model=GameStatus)
 async def get_status(game_id: str, player_id: str):
     presenter = GetStatusPresenter.presenter()
     GetStatus().execute(GetStatus.input(game_id, player_id), presenter)
@@ -97,6 +107,8 @@ async def get_status(game_id: str, player_id: str):
 def run():
     uvicorn.run("love_letter.web.app:app", host="0.0.0.0", port=8080, reload=True)
 
+
+app.include_router(api, prefix="/api")
 
 if __name__ == "__main__":
     run()

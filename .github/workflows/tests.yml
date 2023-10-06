@@ -9,6 +9,67 @@ on:
       - master
 
 
+#jobs:
+#  tests:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#
+#      - uses: actions/setup-python@v4
+#        with:
+#          python-version: '3.10'
+#
+#      - name: Run unit tests
+#        run: |
+#          ./tests/run-tests.sh
+#
+#      - name: Run unit tests with real storage
+#        run: |
+#          export repository_impl=pickle
+#          ./tests/run-tests.sh
+#
+#      - name: Run unit tests with mongo
+#        run: |
+#          docker pull mongo:latest
+#          export repository_impl=mongo
+#          ./tests/run-tests.sh
+#
+#      - name: Upload artifact for deployment jobs
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: love-letter
+#          path: |
+#            .
+#            !venv/
+#            !.pytest_cache/
+#
+#  deploy:
+#    runs-on: ubuntu-latest
+#    needs: tests
+#    environment:
+#      name: 'Production'
+#      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+#
+#    steps:
+#      - name: Download artifact from build job
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: love-letter
+#          path: .
+#
+#      - name: 'Deploy to Azure Web App'
+#        uses: azure/webapps-deploy@v2
+#        id: deploy-to-webapp
+#        with:
+#          app-name: 'love-letter'
+#          slot-name: 'Production'
+#          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2B1A5D895B6C4B299CB16E49C82CE0F5 }}
+
+env:
+  IMAGE_NAME: "love_letter"
+  DOCKERHUB_USERNAME: "eddy15201"
+
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -18,50 +79,29 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Run unit tests
         run: |
           ./tests/run-tests.sh
 
-      - name: Run unit tests with real storage
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Build and push Docker image
         run: |
-          export repository_impl=pickle
-          ./tests/run-tests.sh
+          docker build -t ${{ env.IMAGE_NAME }} .
+          docker login -u ${{ env.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker tag ${{ env.IMAGE_NAME }} ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+        env:
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          DOCKER_IMAGE_NAME: ${{ env.IMAGE_NAME }}
 
-      - name: Run unit tests with mongo
-        run: |
-          docker pull mongo:latest
-          export repository_impl=mongo
-          ./tests/run-tests.sh
-
-      - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v3
-        with:
-          name: love-letter
-          path: |
-            .
-            !venv/
-            !.pytest_cache/
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: tests
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: love-letter
-          path: .
-
-      - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
-        id: deploy-to-webapp
-        with:
-          app-name: 'love-letter'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2B1A5D895B6C4B299CB16E49C82CE0F5 }}
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'love-letter'
+        images: ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
