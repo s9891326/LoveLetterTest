@@ -58,17 +58,10 @@ jobs:
           name: love-letter
           path: .
 
-#      - name: 'Deploy to Azure Web App'
-#        uses: azure/webapps-deploy@v2
-#        id: deploy-to-webapp
-#        with:
-#          app-name: 'love-letter'
-#          slot-name: 'Production'
-#          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2B1A5D895B6C4B299CB16E49C82CE0F5 }}
-#          startup-command: "poetry run uvicorn love_letter.web.app:app"
-
-      - name: Deploy to Azure Web App
-        run: |
-          az webapp up --name love-letter --sku F1
-        env:
-          AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2B1A5D895B6C4B299CB16E49C82CE0F5 }}
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-webapp
+        with:
+          app-name: 'love-letter'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2B1A5D895B6C4B299CB16E49C82CE0F5 }}
