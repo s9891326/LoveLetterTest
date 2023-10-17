@@ -8,6 +8,10 @@ on:
     branches:
       - master
 
+permissions:
+      id-token: write
+      contents: read
+
 env:
   IMAGE_NAME: "love_letter"
   DOCKERHUB_USERNAME: "eddy15201"
