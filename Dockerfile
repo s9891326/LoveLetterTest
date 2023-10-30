@@ -18,6 +18,6 @@ RUN pip install --upgrade pip && pip install poetry && poetry update
 COPY --from=frontend-builder /app/build ./static_files
 COPY love_letter ./love_letter
 ENV static_files=/app/static_files
-CMD poetry run uvicorn love_letter.web.app:app --host 0.0.0.0 --port 5566
+CMD poetry run uvicorn love_letter.web.app:app --host 0.0.0.0 --port 8000
 
 
