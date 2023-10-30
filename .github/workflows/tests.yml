@@ -13,7 +13,7 @@ permissions:
       contents: read
 
 env:
-  IMAGE_NAME: "love_letter"
+  IMAGE_NAME: "love-letter"
   DOCKERHUB_USERNAME: "eddy15201"
 
 jobs:
@@ -31,29 +31,29 @@ jobs:
 #        run: |
 #          ./tests/run-tests.sh
 
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: 'Run Azure CLI commands'
-        run: |
-            az account show
-            az group list
-            pwd
-
-#      - name: Build and push Docker image
-#        run: |
-#          docker build -t ${{ env.IMAGE_NAME }} .
-#          docker login -u ${{ env.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-#          docker tag ${{ env.IMAGE_NAME }} ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-#          docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-#        env:
-#          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-#          DOCKER_IMAGE_NAME: ${{ env.IMAGE_NAME }}
+#      - name: Login to Azure
+#        uses: azure/login@v1
+#        with:
+#          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+#          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+#          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 #
+#      - name: 'Run Azure CLI commands'
+#        run: |
+#            az account show
+#            az group list
+#            pwd
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t ${{ env.IMAGE_NAME }} .
+          docker login -u ${{ env.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker tag ${{ env.IMAGE_NAME }} ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+        env:
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          DOCKER_IMAGE_NAME: ${{ env.IMAGE_NAME }}
+
 #      - name: Deploy to Azure Web App
 #        uses: azure/webapps-deploy@v2
 #        with:
