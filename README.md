@@ -107,5 +107,8 @@ cat requirements.txt | xargs poetry add
 poetry export -f requirements.txt -o requirements.txt --without-hashes
 ```
 
+## 部屬到Azure web app
+- 若要手動去處發azure web app再次pull image的話可以去`部署中心`，底下的`webhook URL`用postman打他的POST接口
+
 - [整合Black進Pycharm](https://black.readthedocs.io/en/stable/integrations/editors.html)
 
