@@ -3,14 +3,14 @@ name: tests
 on:
   push:
     branches:
-      - feature/test_deploy_on_azure
+      - master
   pull_request:
     branches:
       - master
 
 permissions:
-      id-token: write
-      contents: read
+  id-token: write
+  contents: read
 
 env:
   IMAGE_NAME: "love-letter"
@@ -23,14 +23,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-#      - uses: actions/setup-python@v4
-#        with:
-#          python-version: "3.10"
-#
-#      - name: Run unit tests
-#        run: |
-#          ./tests/run-tests.sh
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
+      - name: Run unit tests
+        run: |
+          ./tests/run-tests.sh
+
+      - name: Run unit tests with real storage
+        run: |
+          export repository_impl=pickle
+          ./tests/run-tests.sh
+
+      - name: Run unit tests with mongo
+        run: |
+          docker pull mongo:latest
+          export repository_impl=mongo
+          ./tests/run-tests.sh
+
+  build:
+    name: Build Docker image
+    environment: 'Production'
+    needs: tests
+    steps:
       - name: Build and push Docker image
         run: |
           docker build -t ${{ env.IMAGE_NAME }} .
