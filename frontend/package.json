@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "build": "PUBLIC_URL=/home craco build",
     "test": "craco test",
     "eject": "craco eject"
   },

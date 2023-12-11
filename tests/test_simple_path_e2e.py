@@ -49,18 +49,18 @@ class LoveLetterSimpleCaseEndToEndTests(LoveLetterRepositoryAwareTestCase):
         love_letter.models.deck_factory = lambda: TestDeckForSimpleE2E()
 
         # 建立遊戲
-        game_id = self.t.post(f"/games/create/by_player/{player_a}").json()
+        game_id = self.t.post(f"/api/games/create/by_player/{player_a}").json()
 
         # 加入遊戲
-        is_success = self.t.post(f"/games/{game_id}/player/{player_b}/join").json()
+        is_success = self.t.post(f"/api/games/{game_id}/player/{player_b}/join").json()
         self.assertTrue(is_success)
 
         # 開始遊戲
-        is_started = self.t.post(f"/games/{game_id}/start").json()
+        is_started = self.t.post(f"/api/games/{game_id}/start").json()
         self.assertTrue(is_started)
 
         # 確認遊戲狀態
-        response = self.t.get(f"/games/{game_id}/player/{player_a}/status").json()
+        response = self.t.get(f"/api/games/{game_id}/player/{player_a}/status").json()
         self.assertEqual(
             {
                 "game_id": game_id,
@@ -161,7 +161,7 @@ class LoveLetterSimpleCaseEndToEndTests(LoveLetterRepositoryAwareTestCase):
         # 玩家出牌
         request_body = {"chosen_player": "player-b", "guess_card": "神父"}
         response = self.t.post(
-            f"/games/{game_id}/player/player-a/card/衛兵/play", json=request_body
+            f"/api/games/{game_id}/player/player-a/card/衛兵/play", json=request_body
         ).json()
         self.assertEqual(
             {
