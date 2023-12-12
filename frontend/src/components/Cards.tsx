@@ -1,5 +1,12 @@
-import card_back from "./card-back.png";
-import card_front from "./card-front.png";
+import card_back from "../img/card_back.png";
+import guard from "../img/guard.png";
+import priest from "../img/priest.png";
+import baron from "../img/baron.png";
+import handmaid from "../img/handmaid.png";
+import prince from "../img/prince.png";
+import king from "../img/king.png";
+import countess from "../img/countess.png";
+import princes from "../img/princes.png";
 
 import { Button, Select } from "@chakra-ui/react";
 import { useRef } from "react";
@@ -10,15 +17,15 @@ import { HandCard } from "@/types";
 
 export function CardBack(props: { enabled: boolean }) {
   let cssConfig = {};
-  if (props.enabled === false) {
+  if (!props.enabled) {
     cssConfig = { filter: "grayscale(1)", opacity: 0.7 };
   }
   return (
-    <div className="w-[118px] h-[172px] shadow-xl shadow-zinc-500 container relative">
+    <div className="w-[118px] h-[172px] shadow-[6px_10px_9px_0px_rgba(46,0,0,1)] container relative">
       <img
         alt=""
         src={card_back}
-        className="bg-white rounded-xl gr"
+        className="rounded-xl"
         style={cssConfig}
       />
     </div>
@@ -43,7 +50,10 @@ export function CardAction(props: { handCard: HandCard }) {
     <>
       {has_player_options && (
         <Select
+          border="0"
+          bg="#683C3C99"
           size="xs"
+          marginY="2px"
           defaultValue={handCard.usage.choose_players[0]}
           ref={ref_chosen_player}
           onChange={(e) => {
@@ -59,7 +69,10 @@ export function CardAction(props: { handCard: HandCard }) {
       )}
       {has_guess_card_options && (
         <Select
+          border="0"
+          bg="#683C3C99"
           size="xs"
+          marginY="2px"
           defaultValue={handCard.usage.can_guess_cards[0]}
           ref={ref_guessed_card}
           onChange={(e) => {
@@ -74,7 +87,12 @@ export function CardAction(props: { handCard: HandCard }) {
         </Select>
       )}
       <Button
-        size="xs"
+        size="sm"
+        bgGradient="radial(#DCA4A4 0%, #D86E6E 52.18%, #571440 100%)"
+        width="100%"
+        position="absolute"
+        left="0"
+        bottom="0"
         onClick={() => {
           const payload: { [prop: string]: string } = {};
           if (ref_chosen_player.current) {
@@ -104,12 +122,32 @@ export function CardFront(props: { handCard: HandCard }) {
     return <CardBack enabled={true} />;
   }
 
+  let card_src = card_back;
+
+  if (handCard.name === "衛兵") {
+    card_src = guard;
+  } else if (handCard.name === "神父") {
+    card_src = priest;
+  } else if (handCard.name === "男爵") {
+    card_src = baron;
+  } else if (handCard.name === "侍女") {
+    card_src = handmaid;
+  } else if (handCard.name === "王子") {
+    card_src = prince;
+  } else if (handCard.name === "國王") {
+    card_src = king;
+  } else if (handCard.name === "伯爵夫人") {
+    card_src = countess;
+  } else if (handCard.name === "公主") {
+    card_src = princes;
+  }
+
   return (
-    <div className="w-[118px] h-[172px] shadow-xl shadow-zinc-500 container relative">
+    <div className="w-[118px] h-[172px] shadow-[6px_10px_9px_0px_rgba(46,0,0,1)] container relative">
       <img
         alt={handCard.name}
-        src={card_front}
-        className="bg-white rounded-xl"
+        src={card_src}
+        className="rounded-xl"
       />
       <div className="flex flex-col absolute top-[15px] p-2 text-white items-center">
         <div className="text-xs mb-1">{handCard.value}</div>

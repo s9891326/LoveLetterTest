@@ -53,7 +53,7 @@ function RoundEventView(props: { event: GameEvent; index: number }) {
   }
 
   return (
-    <div className="m-1 p-2 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px]">
+    <div className="m-1 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px]">
       <Badge variant="solid" colorScheme="green">
         round started
       </Badge>
@@ -74,14 +74,14 @@ function CardEventView(props: { event: GameEvent; index: number }) {
     const evt = event.took_effect.event;
     if (evt?.out) {
       extra = (
-        <div className="m-1 p-2 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px] bg-slate-300">
+        <div className="m-1 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px] bg-slate-300">
           <div className="font-extrabold mr-2">{evt.out}</div>
           出局
         </div>
       );
     } else if (evt?.who) {
       extra = (
-        <div className="m-1 p-2 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px] bg-slate-300">
+        <div className="m-1 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px] bg-slate-300">
           <div className="font-extrabold mr-2">{evt.who}</div>
           <div className="mr-2">丟棄</div>
           <div className="font-extrabold">{evt.card}</div>
@@ -89,7 +89,7 @@ function CardEventView(props: { event: GameEvent; index: number }) {
       );
     } else if (evt?.protected) {
       extra = (
-        <div className="m-1 p-2 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px] bg-slate-300">
+        <div className="m-1 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px] bg-slate-300">
           <div className="font-extrabold mr-2">{evt.protected}</div>
           <div className="mr-2">被侍女保護中</div>
           <div className="font-extrabold mr-2">{evt.trigger_by}</div>
@@ -122,7 +122,7 @@ function GameOverView(props: { event: GameEvent; index: number }) {
   }
 
   return (
-    <div className="m-1 p-2 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px]">
+    <div className="m-1 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px]">
       <Badge variant="solid" colorScheme="blackAlpha">
         game over
       </Badge>
@@ -141,7 +141,7 @@ function CardActionItem(props: { event: GameEvent; index: number }) {
   }
   if (event.with_card != null) {
     return (
-      <div className="m-1 p-2 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px]">
+      <div className="m-1 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px]">
         <Badge colorScheme="blue">{event.turn_player}</Badge>
         &nbsp;使用&nbsp;
         <Badge colorScheme="purple">{event.card}</Badge>
@@ -156,7 +156,7 @@ function CardActionItem(props: { event: GameEvent; index: number }) {
 
   if (event.to != null) {
     return (
-      <div className="m-1 p-2 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px]">
+      <div className="m-1 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px]">
         <Badge colorScheme="blue">{event.turn_player}</Badge>
         &nbsp;對&nbsp;
         <Badge colorScheme="red">{event.to}</Badge>
@@ -168,7 +168,7 @@ function CardActionItem(props: { event: GameEvent; index: number }) {
   }
 
   return (
-    <div className="m-1 p-2 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px]">
+    <div className="m-1 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px]">
       <Badge colorScheme="blue">{event.turn_player}</Badge>
       &nbsp;使用&nbsp;
       <Badge colorScheme="purple">{event.card}</Badge>
@@ -194,27 +194,25 @@ export function GameEvents() {
   const events = context.getGameStatus().events;
   if (events === null || events?.length === 0) {
     return (
-      <div>
-        <h1>遊戲事件</h1>
-        <div className="bg-blue-200 m-4 p-2 min-h-[3rem] pl-3 rounded-xl flex items-center">
-          - (沒有消息) -
+      <div className="text-center text-[20px] leading-[24px]">
+        <h1 className="text-white">遊戲事件</h1>
+        <div className="items-center border-2 border-[#939393] rounded-[7px] bg-[#D9D9D9] m-4 p-2 min-h-[3rem] grid text-[#7D789D]">
+          沒有消息
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex-auto">
-      <h1>遊戲事件</h1>
-      <div className="overflow-y-auto border-2 border-black shadow-2xl">
-        {lastN(8, events as Array<GameEvent>).map((evt, index) => (
-          <div key={`GameEvents_${index}`}>
-            <RoundEventView event={evt} index={index} />
-            <CardEventView event={evt} index={index} />
-            <GameOverView event={evt} index={index} />
-          </div>
-        ))}
-      </div>
+    <div className="flex-auto text-center text-[20px] leading-[24px]">
+      <h1 className="text-white">遊戲事件</h1>
+      {lastN(8, events as Array<GameEvent>).map((evt, index) => (
+        <div className="items-center border-2 border-[#939393] rounded-[7px] bg-[#D9D9D9] m-4 p-2 min-h-[3rem] text-[#7D789D]">
+          <RoundEventView event={evt} index={index} />
+          <CardEventView event={evt} index={index} />
+          <GameOverView event={evt} index={index} />
+        </div>
+      ))}
     </div>
   );
 }

@@ -25,23 +25,26 @@ export function Deck() {
   return (
     <>
       <Flex
-        bg="gray.300"
+        bg="#0000004D"
         width={width}
         justifyContent="center"
         alignItems="center"
-        rounded={5}
+        px="26px"
+        pt="18px"
+        pb="14px"
+        rounded={3}
       >
-        <Flex>
-          <div>
-            <div className="text-xs">{cards[0].name}</div>
+        <div className="text-white flex text-center h-full">
+          <div className="w-[115px] relative">
+            <div className="text-xs rounded-[3px] py-[7px] bg-[#300000] mb-0.5">{cards[0].name}</div>
             <CardAction handCard={cards[0]} />
           </div>
           <div className="min-w-[15px]"></div>
-          <div>
-            <div className="text-xs">{cards[1].name}</div>
+          <div className="w-[115px] relative">
+            <div className="text-xs rounded-[3px] py-[7px] bg-[#300000] mb-0.5">{cards[1].name}</div>
             <CardAction handCard={cards[1]} />
           </div>
-        </Flex>
+        </div>
       </Flex>
     </>
   );

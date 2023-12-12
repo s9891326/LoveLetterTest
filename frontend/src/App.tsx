@@ -4,6 +4,7 @@ import "./App.css";
 import { CreateOrJoinGame, GameRoom } from "@/components";
 import { ViewState } from "@/types";
 import { GameDataProvider } from "@/providers";
+import bg from "./img/bg.png";
 
 function GameUI() {
   const [flow, setFlow] = useState<ViewState>("pick-name");
@@ -22,9 +23,10 @@ function GameUI() {
 
 function App() {
   return (
-    <>
+    // 為了解決背景圖片會有白色十字問題，增加background-color來遮住
+    <div style={{backgroundImage: `url(${bg})`, backgroundColor: "#5A0000"}}>
       <GameUI />
-    </>
+    </div>
   );
 }
 

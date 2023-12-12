@@ -40,8 +40,8 @@ export function GameRoom(props: { visitFunc: (view: ViewState) => void }) {
 
   return (
     <>
-      <div className="flex h-screen bg-slate-200">
-        <div className="w-[75vw] p-4 flex flex-col mx-auto">
+      <div className="flex h-screen">
+        <div className="w-[75vw] p-4 flex flex-col mx-auto bg-[#5A0000C5]">
           <div className="flex flex-grow items-center justify-center">
             <div className="flex h-[20vh]">
               <PlayerHand index={0} />
@@ -52,7 +52,7 @@ export function GameRoom(props: { visitFunc: (view: ViewState) => void }) {
               <PlayerHand index={3} />
             </div>
 
-            <div className="flex h-[20vh] w-[350px] m-4 ml-16 mr-16 flex-row">
+            <div className="flex h-[20vh] mx-16 my-4 flex-row">
               <Deck />
             </div>
             <div className="flex h-[20vh] m-4">
@@ -69,7 +69,7 @@ export function GameRoom(props: { visitFunc: (view: ViewState) => void }) {
           </Box>
         </div>
         {/*<!-- Game Status-->*/}
-        <div className="w-[25vw] p-4 border-l-2 border-slate-400 shadow-amber-300 max-h-[100vh]">
+        <div className="w-[25vw] max-h-[100vh] bg-[#080027C5]">
           <GameStatusBoard />
           {/* <!-- Game events --> */}
           <GameEvents />
