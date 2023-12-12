@@ -48,6 +48,9 @@ jobs:
     environment: 'Production'
     needs: tests
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Build and push Docker image
         run: |
           docker build -t ${{ env.IMAGE_NAME }} .
