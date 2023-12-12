@@ -36,4 +36,4 @@ class GetStatusEvent(DomainEvent):
 
 @dataclass
 class GameEvent(DomainEvent):
-    url: str
+    game_id: str

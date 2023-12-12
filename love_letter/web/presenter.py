@@ -1,5 +1,6 @@
 from typing import Any, Dict, List, Optional
 
+from love_letter.config import config
 from love_letter.models import Game, PlayerJoinedEvent
 
 # isort: off
@@ -152,7 +153,7 @@ class LobbyStartGamePresenter(Presenter):
     def as_view_model(self):
         for event in self.events:
             if isinstance(event, GameEvent):
-                return event
+                return {"url": f"{config.FRONTEND_HOST}/games/{event.game_id}"}
         raise BaseException("Game is unavailable.")
 
     @classmethod
