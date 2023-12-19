@@ -15,17 +15,23 @@ import { playCard } from "@/apis";
 import { useGameId, useUsername } from "@/hooks";
 import { HandCard } from "@/types";
 
-export function CardBack(props: { enabled: boolean }) {
+export function CardBack(props: { enabled: boolean, first_card?: boolean}) {
   let cssConfig = {};
   if (!props.enabled) {
     cssConfig = { filter: "grayscale(1)", opacity: 0.7 };
   }
+  let divCssConfig = {};
+  if (props.first_card) {
+    divCssConfig = { "margin-right": "10px"};
+  }
+
   return (
-    <div className="w-[118px] h-[172px] shadow-[6px_10px_9px_0px_rgba(46,0,0,1)] container relative">
+    <div className="w-[118px] h-[172px] container relative"
+         style={divCssConfig}>
       <img
         alt=""
         src={card_back}
-        className="rounded-xl"
+        className="rounded-xl h-full w-full object-cover"
         style={cssConfig}
       />
     </div>
@@ -115,7 +121,7 @@ export function CardAction(props: { handCard: HandCard }) {
   );
 }
 
-export function CardFront(props: { handCard: HandCard }) {
+export function CardFront(props: { handCard: HandCard, index?: number }) {
   const { handCard } = props;
 
   if (handCard === undefined) {
@@ -123,6 +129,10 @@ export function CardFront(props: { handCard: HandCard }) {
   }
 
   let card_src = card_back;
+  let divCssConfig = {};
+  if (props.index === 1) {
+    divCssConfig = { "margin-left": "10px" };
+  }
 
   if (handCard.name === "衛兵") {
     card_src = guard;
@@ -143,11 +153,12 @@ export function CardFront(props: { handCard: HandCard }) {
   }
 
   return (
-    <div className="w-[118px] h-[172px] shadow-[6px_10px_9px_0px_rgba(46,0,0,1)] container relative">
+    <div className="w-[118px] h-[172px] shadow-[6px_10px_9px_0px_rgba(46,0,0,1)]"
+         style={divCssConfig}>
       <img
         alt={handCard.name}
         src={card_src}
-        className="rounded-xl"
+        className="rounded-xl h-full w-full object-cover"
       />
       <div className="flex flex-col absolute top-[15px] p-2 text-white items-center">
         <div className="text-xs mb-1">{handCard.value}</div>

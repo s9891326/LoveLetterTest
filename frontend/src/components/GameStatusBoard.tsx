@@ -1,22 +1,25 @@
 import { GameContext } from "@/providers";
-import { Seen } from "@/types";
+import {GameStatus, Seen} from "@/types";
 import { Button } from "@chakra-ui/react";
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { MdOutlineContentCopy } from "react-icons/md";
+import {startGame} from "@/apis";
 
 function PlayerItem(props: { index: number; name: string }) {
   if (props.name === "-") {
     return (
-      <div className="bg-[#D9D9D9] m-4 p-2 min-h-[3rem] h-[54px] rounded-[7px] border-2 border-[#939393] grid items-center text-center">
-        <span className="text-[#7D789D] text-[20px]">玩家{props.index}：-</span>
+      <div className="m-4 p-2 min-h-[3rem] h-[54px] rounded-[7px] border-2 border-[#939393] grid items-center text-center"
+           style={{background: "linear-gradient(0deg, #939393, #939393), linear-gradient(0deg, #D9D9D9, #D9D9D9)"}}>
+        <span className="text-[#9BAFC5] text-[20px]">玩家{props.index}：-</span>
       </div>
     );
   }
 
   return (
-    <div className="bg-amber-200 m-4 p-2 min-h-[3rem] h-[54px] rounded-[7px] border-2 border-[#939393] grid items-center text-center">
-      <span className="text-[#7D789D] text-[20px]">玩家{props.index}：{props.name}</span>
+    <div className="m-4 p-2 min-h-[3rem] h-[54px] rounded-[7px] border-2 border-[#939393] grid items-center text-center"
+         style={{background: "linear-gradient(180deg, #FFF0CA -7.5%, #FFC738 106.25%), linear-gradient(0deg, #DEA617, #DEA617)"}}>
+      <p className="text-[#5A2B00] text-[20px]">玩家{props.index}：{props.name}</p>
     </div>
   );
 }
@@ -28,6 +31,31 @@ export function SeenItem(props: { seen: Seen }) {
       看到 {seen.opponent_name} 持有 {seen.card.name}
     </>
   );
+}
+
+function StartGameFunc(props: { gameStatus: GameStatus | null }) {
+  const { gameStatus } = props;
+  if (gameStatus == null) {
+    return <></>;
+  }
+  if (gameStatus.players.length >= 2 && gameStatus.rounds.length === 0) {
+    return (
+      <>
+        <div className="flex items-center">
+          <button className="m-4 p-2 min-h-[3rem] h-[54px] rounded-[7px] w-full text-white"
+                  style={{background: "radial-gradient(51.46% 1471.36% at 51.57% 49.61%, #94A0DD 0%, #6A7196 53.13%, #18347B 100%)"}}
+                  onClick={() => {
+                    startGame(gameStatus?.game_id).then((result) =>
+                      console.log(`${gameStatus?.game_id} started? => ${result}`)
+                    );
+                  }}>
+            開始遊戲
+          </button>
+        </div>
+      </>
+    )
+  }
+  return <></>;
 }
 
 export function GameStatusBoard() {
@@ -82,8 +110,9 @@ export function GameStatusBoard() {
   return (
     <>
       <div className="mb-10">
-        <h1>遊戲狀態</h1>
-        <div className="bg-gray-100 m-4 p-2 min-h-[3rem] h-[54px] rounded-[7px] border border-[#939393] flex items-center">
+        <StartGameFunc gameStatus={gameStatus}/>
+        <div className="m-4 p-2 min-h-[3rem] h-[54px] rounded-[7px] border border-[#939393] flex items-center text-[#BEC4CA]"
+             style={{background: "linear-gradient(0deg, #939393, #939393), linear-gradient(180deg, rgba(217, 217, 217, 0.09) 0%, rgba(217, 217, 217, 0.3) 100%)"}}>
           {gameProgress}
         </div>
         <h1 className="text-center text-[20px] leading-[24px] text-white">玩家列表</h1>

@@ -51,7 +51,11 @@ npm i
 npm start
 ```
 
-前端 React app 將運行於本機 [http://localhost:3000/](http://localhost:3000/)。
+前端 React app 將運行於本機 [http://localhost:3000/](http://localhost:3000/)。並設定環境變數
+```shell
+# environment
+REACT_APP_URL=http://localhost:8080/api
+```
 
 ## 協作開發
 

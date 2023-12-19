@@ -38,7 +38,7 @@ function RoundEventView(props: { event: GameEvent; index: number }) {
         <Badge variant="solid" colorScheme="messenger" ml={2}>
           {event.winner}
         </Badge>
-        <Box ml={2}>成功送信給公主</Box>
+        <Box ml={2} textColor={"white"}>成功送信給公主</Box>
       </>
     );
   } else {
@@ -47,7 +47,7 @@ function RoundEventView(props: { event: GameEvent; index: number }) {
         <Badge variant="solid" colorScheme="messenger" ml={2}>
           {context.getStartPlayer()}
         </Badge>
-        <Box ml={2}>為起始玩家</Box>
+        <Box ml={2} textColor={"white"}>為起始玩家</Box>
       </>
     );
   }
@@ -143,11 +143,11 @@ function CardActionItem(props: { event: GameEvent; index: number }) {
     return (
       <div className="m-1 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px]">
         <Badge colorScheme="blue">{event.turn_player}</Badge>
-        &nbsp;使用&nbsp;
+        <span className="text-white">&nbsp;使用&nbsp;</span>
         <Badge colorScheme="purple">{event.card}</Badge>
-        &nbsp;猜測&nbsp;
+        <span className="text-white">&nbsp;猜測&nbsp;</span>
         <Badge colorScheme="red">{event.to}</Badge>
-        &nbsp;有&nbsp;
+        <span className="text-white">&nbsp;有&nbsp;</span>
         <Badge colorScheme="purple">{event.with_card}</Badge>
         <NewIcon display={index === 0} />
       </div>
@@ -158,9 +158,9 @@ function CardActionItem(props: { event: GameEvent; index: number }) {
     return (
       <div className="m-1 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px]">
         <Badge colorScheme="blue">{event.turn_player}</Badge>
-        &nbsp;對&nbsp;
+        <span className="text-white">&nbsp;對&nbsp;</span>
         <Badge colorScheme="red">{event.to}</Badge>
-        &nbsp;使用&nbsp;
+        <span className="text-white">&nbsp;使用&nbsp;</span>
         <Badge colorScheme="purple">{event.card}</Badge>
         <NewIcon display={index === 0} />
       </div>
@@ -170,7 +170,7 @@ function CardActionItem(props: { event: GameEvent; index: number }) {
   return (
     <div className="m-1 min-h-[1rem] pl-3 rounded-xl flex items-center text-[12px]">
       <Badge colorScheme="blue">{event.turn_player}</Badge>
-      &nbsp;使用&nbsp;
+      <span className="text-white">&nbsp;使用&nbsp;</span>
       <Badge colorScheme="purple">{event.card}</Badge>
       <NewIcon display={index === 0} />
     </div>
@@ -206,13 +206,17 @@ export function GameEvents() {
   return (
     <div className="flex-auto text-center text-[20px] leading-[24px]">
       <h1 className="text-white">遊戲事件</h1>
-      {lastN(8, events as Array<GameEvent>).map((evt, index) => (
-        <div className="items-center border-2 border-[#939393] rounded-[7px] bg-[#D9D9D9] m-4 p-2 min-h-[3rem] text-[#7D789D]">
-          <RoundEventView event={evt} index={index} />
-          <CardEventView event={evt} index={index} />
-          <GameOverView event={evt} index={index} />
-        </div>
-      ))}
+      <div className="m-4 max-h-[28rem] overflow-y-auto"
+           style={{background: "linear-gradient(180deg, rgba(183, 163, 190, 0.1) 0%, rgba(147, 113, 189, 0.5) 100%)"}}>
+        {lastN(8, events as Array<GameEvent>).map((evt, index) => (
+          <div className="items-center border-2 border-[#939393] rounded-[7px] m-4 p-2 min-h-[3rem] text-[#7D789D]"
+          style={{background: "linear-gradient(0deg, #7B77AB, #7B77AB), linear-gradient(180deg, #8F8ED5 0%, #474596 126.25%)"}}>
+            <RoundEventView event={evt} index={index} />
+            <CardEventView event={evt} index={index} />
+            <GameOverView event={evt} index={index} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

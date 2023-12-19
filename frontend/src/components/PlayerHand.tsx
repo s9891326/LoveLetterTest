@@ -85,14 +85,16 @@ export function PlayerHand(props: {
                       <CardFront
                           key={`${x.name}${playerName}_${index}`}
                           handCard={x}
-                      ></CardFront>
+                          index={index}
+                      />
                   ))}
                 </div>
             )}
             {is_turn_player && !is_current_user && (
-                <div className="flex border-8 border-lime-400 rounded-xl">
-                  <CardBack enabled={true}></CardBack>
-                  <CardBack enabled={true}></CardBack>
+                <div className="flex p-8 rounded-xl"
+                     style={{background: "linear-gradient(121.49deg, #E1DCFF 0.01%, #FFEEDF 0.02%, #FF9B3F 97.37%)"}}>
+                  <CardBack enabled={true} first_card={true}/>
+                  <CardBack enabled={true}/>
                 </div>
             )}
           </div>
